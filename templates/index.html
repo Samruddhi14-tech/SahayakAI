@@ -1,0 +1,1439 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Sahayak AI | Learning Assistant</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        .header {
+            height: 70px;
+            background: white;
+            border-bottom: 1px solid #e8ebf2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7%;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: #737b8c;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 45px 25px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 7px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin: 5px 0 12px;
+            color: #111827;
+        }
+
+        .hero p {
+            color: #6b7280;
+            font-size: 17px;
+            margin: 0;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid #e7eaf0;
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 15px rgba(20, 30, 60, 0.04);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            color: #111827;
+        }
+
+        .card-description {
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        textarea,
+        input,
+        select {
+            width: 100%;
+            border: 1px solid #dfe3ea;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 15px;
+            font-family: inherit;
+            outline: none;
+            transition: 0.2s;
+            background: white;
+        }
+
+        textarea {
+            min-height: 130px;
+            resize: vertical;
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+
+        button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 9px;
+            padding: 13px 22px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 14px;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .response-box {
+            margin-top: 24px;
+            background: #f8f9ff;
+            border-left: 4px solid #6366f1;
+            padding: 20px;
+            border-radius: 10px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+            color: #30364a;
+        }
+
+        .loading {
+            color: #6366f1;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .practice-card {
+            border: 1px solid #dddfff;
+            background: linear-gradient(
+                135deg,
+                #ffffff,
+                #f8f8ff
+            );
+        }
+
+        .practice-title {
+            color: #4f46e5;
+        }
+
+        .evaluation-box {
+            margin-top: 22px;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f8f9ff;
+            white-space: pre-wrap;
+            line-height: 1.7;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .progress-header h2 {
+            margin: 0;
+        }
+
+        .status-message {
+            background: #eef2ff;
+            color: #4338ca;
+            padding: 13px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: #fafbff;
+            border: 1px solid #e7eaf4;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4f46e5;
+        }
+
+        .stat-label {
+            color: #737b8c;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .gap-section {
+            margin-top: 30px;
+        }
+
+        .gap-section h3 {
+            margin-bottom: 15px;
+            color: #202635;
+        }
+
+        .gap-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .gap-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 18px;
+            background: white;
+        }
+
+        .gap-title {
+            font-weight: 600;
+            color: #252b3a;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .gap-stats {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .gap-status {
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .needs-practice {
+            background: #fff1f2;
+            color: #dc2626;
+        }
+
+        .improving {
+            background: #ecfdf5;
+            color: #059669;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px 20px;
+            color: #8a92a3;
+            border: 1px dashed #d9dde7;
+            border-radius: 12px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #9aa1af;
+            font-size: 13px;
+        }
+
+        .language-box {
+            margin-bottom: 20px;
+        }
+
+        .language-box label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+
+        @media (max-width: 800px) {
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .gap-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .header {
+                padding: 0 5%;
+            }
+        }
+
+        @media (max-width: 500px) {
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tagline {
+                display: none;
+            }
+
+            .container {
+                padding: 30px 15px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="logo">
+        🤖 Sahayak AI
+    </div>
+
+    <div class="tagline">
+        Personalized AI Learning Assistant
+    </div>
+
+</header>
+
+
+<main class="container">
+
+
+    <!-- HERO -->
+
+    <section class="hero">
+
+        <div class="badge">
+            ✨ Learn • Practice • Improve
+        </div>
+
+        <h1>
+            Learn Smarter with Sahayak
+        </h1>
+
+        <p>
+            Ask questions, identify learning gaps,
+            practice and improve your skills.
+        </p>
+
+    </section>
+
+
+    <!-- ASK SAHAYAK -->
+
+    <section class="card">
+
+        <h2>
+            💬 Ask Sahayak
+        </h2>
+
+        <p class="card-description">
+            Ask anything you are struggling to understand.
+        </p>
+
+
+        <!-- LANGUAGE -->
+
+        <div class="language-box">
+
+            <label for="language">
+                🌐 Choose Language
+            </label>
+
+            <select id="language">
+
+                <option value="English">
+                    English
+                </option>
+
+                <option value="Hindi">
+                    Hindi
+                </option>
+
+                <option value="Marathi">
+                    Marathi
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <textarea
+            id="question"
+            placeholder="Example: What is photosynthesis?"
+        ></textarea>
+
+
+        <button
+            id="askButton"
+            onclick="askSahayak()"
+        >
+            Ask Sahayak →
+        </button>
+
+
+        <p
+            id="askLoading"
+            class="loading hidden"
+        >
+            🧠 Sahayak is analyzing your question...
+        </p>
+
+
+        <div
+            id="response"
+            class="response-box hidden"
+        ></div>
+
+    </section>
+
+
+    <!-- PRACTICE -->
+
+    <section
+        id="answerSection"
+        class="card practice-card hidden"
+    >
+
+        <h2 class="practice-title">
+            ✏️ Your Turn
+        </h2>
+
+        <p class="card-description">
+            Try the practice question given by Sahayak.
+        </p>
+
+
+        <input
+            type="text"
+            id="studentAnswer"
+            placeholder="Type your answer..."
+        >
+
+
+        <button
+            id="submitButton"
+            onclick="submitAnswer()"
+        >
+            Submit Answer ✓
+        </button>
+
+
+        <p
+            id="evaluateLoading"
+            class="loading hidden"
+        >
+            🔍 Sahayak is checking your answer...
+        </p>
+
+
+        <div
+            id="evaluation"
+            class="evaluation-box hidden"
+        ></div>
+
+    </section>
+
+
+    <!-- PROGRESS -->
+
+    <section class="card">
+
+        <div class="progress-header">
+
+            <h2>
+                📊 Your Progress
+            </h2>
+
+        </div>
+
+
+        <div
+            id="learningStatus"
+            class="status-message"
+        >
+            🎯 Start answering questions to track your progress!
+        </div>
+
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    💬
+                </div>
+
+                <div
+                    id="questionCount"
+                    class="stat-number"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Questions
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🎯
+                </div>
+
+                <div
+                    id="conceptCount"
+                    class="stat-number"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Concepts
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ✏️
+                </div>
+
+                <div
+                    id="attemptCount"
+                    class="stat-number"
+                >
+                    0
+                </div>
+
+                <div class="stat-label">
+                    Attempts
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    📈
+                </div>
+
+                <div
+                    id="accuracyCount"
+                    class="stat-number"
+                >
+                    0%
+                </div>
+
+                <div class="stat-label">
+                    Accuracy
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- LEARNING GAPS -->
+
+        <div class="gap-section">
+
+            <h3>
+                🧠 Learning Gaps
+            </h3>
+
+            <div
+                id="learningGaps"
+                class="gap-grid"
+            >
+
+                <div class="empty-state">
+
+                    🎓
+                    <br><br>
+
+                    No learning gaps yet.
+                    <br>
+
+                    Start practicing to see your progress.
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="footer">
+
+    Sahayak AI • Personalized Learning Assistant
+
+</footer>
+
+
+<script>
+
+/* =================================================
+   GLOBAL VARIABLES
+================================================= */
+
+let currentQuestion = "";
+let selectedLanguage = "English";
+
+
+/* =================================================
+   GET SELECTED LANGUAGE
+================================================= */
+
+function getSelectedLanguage() {
+
+    const languageElement =
+        document.getElementById("language");
+
+    if (languageElement) {
+        return languageElement.value;
+    }
+
+    return "English";
+}
+
+
+/* =================================================
+   ASK SAHAYAK
+================================================= */
+
+async function askSahayak() {
+
+    const questionElement =
+        document.getElementById("question");
+
+    const question =
+        questionElement.value.trim();
+
+    selectedLanguage =
+        getSelectedLanguage();
+
+
+    if (!question) {
+
+        alert("Please enter a question.");
+
+        return;
+    }
+
+
+    const button =
+        document.getElementById("askButton");
+
+    button.disabled = true;
+
+    button.innerText =
+        "Analyzing...";
+
+
+    document
+        .getElementById("askLoading")
+        .classList
+        .remove("hidden");
+
+
+    const responseBox =
+        document.getElementById("response");
+
+    responseBox.innerText = "";
+
+    responseBox.classList.add("hidden");
+
+
+    try {
+
+        const response =
+            await fetch("/ask", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    question:
+                        question,
+
+                    language:
+                        selectedLanguage
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Request failed."
+            );
+        }
+
+
+        responseBox.innerText =
+            data.message || "";
+
+        responseBox.classList
+            .remove("hidden");
+
+
+        /* -----------------------------------------
+           STORE PRACTICE QUESTION
+        ----------------------------------------- */
+
+        if (data.practice_question) {
+
+            currentQuestion =
+                data.practice_question;
+
+            console.log(
+                "Practice question:",
+                currentQuestion
+            );
+
+        } else {
+
+            console.warn(
+                "No practice question received."
+            );
+
+        }
+
+
+        document
+            .getElementById("answerSection")
+            .classList
+            .remove("hidden");
+
+
+        updateStats();
+
+    }
+
+    catch (error) {
+
+        responseBox.innerText =
+            "Something went wrong: " +
+            error.message;
+
+        responseBox.classList
+            .remove("hidden");
+
+        console.error(
+            "ASK ERROR:",
+            error
+        );
+
+    }
+
+
+    document
+        .getElementById("askLoading")
+        .classList
+        .add("hidden");
+
+
+    button.disabled = false;
+
+    button.innerText =
+        "Ask Sahayak →";
+}
+
+
+/* =================================================
+   SUBMIT ANSWER
+================================================= */
+
+async function submitAnswer() {
+
+    const answerElement =
+        document.getElementById(
+            "studentAnswer"
+        );
+
+    const answer =
+        answerElement.value.trim();
+
+
+    selectedLanguage =
+        getSelectedLanguage();
+
+
+    if (!answer) {
+
+        alert("Please enter your answer.");
+
+        return;
+    }
+
+
+    if (!currentQuestion) {
+
+        alert(
+            "Please ask Sahayak a question first."
+        );
+
+        return;
+    }
+
+
+    const button =
+        document.getElementById(
+            "submitButton"
+        );
+
+    button.disabled = true;
+
+    button.innerText =
+        "Checking...";
+
+
+    document
+        .getElementById("evaluateLoading")
+        .classList
+        .remove("hidden");
+
+
+    const evaluation =
+        document.getElementById(
+            "evaluation"
+        );
+
+    evaluation.innerText = "";
+
+    evaluation.classList.add("hidden");
+
+
+    console.log(
+        "Question being evaluated:",
+        currentQuestion
+    );
+
+    console.log(
+        "Student answer:",
+        answer
+    );
+
+
+    try {
+
+        const response =
+            await fetch("/evaluate", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    question:
+                        currentQuestion,
+
+                    answer:
+                        answer,
+
+                    language:
+                        selectedLanguage
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                data.error ||
+                "Evaluation failed."
+            );
+        }
+
+
+        evaluation.innerText =
+            data.message || "";
+
+        evaluation.classList
+            .remove("hidden");
+
+
+        /* =========================================
+           MASTERED
+        ========================================= */
+
+        if (data.mastered) {
+
+            evaluation.innerText =
+                (data.message || "") +
+                "\n\n🎉 CONCEPT MASTERED! 🏆\n\n" +
+                "You have successfully demonstrated " +
+                "understanding of this concept.";
+
+
+            document
+                .getElementById("answerSection")
+                .classList
+                .add("hidden");
+
+
+            currentQuestion = "";
+
+
+            answerElement.value = "";
+
+        }
+
+
+        /* =========================================
+           NOT MASTERED
+        ========================================= */
+
+        else {
+
+            const nextQuestion =
+                extractNextQuestion(
+                    data.message
+                );
+
+
+            if (nextQuestion) {
+
+                currentQuestion =
+                    nextQuestion;
+
+
+                console.log(
+                    "NEW PRACTICE QUESTION:",
+                    currentQuestion
+                );
+
+
+                answerElement.value = "";
+
+            }
+
+            else {
+
+                console.warn(
+                    "Next practice question " +
+                    "could not be extracted."
+                );
+
+            }
+
+        }
+
+
+        updateStats();
+
+    }
+
+    catch (error) {
+
+        evaluation.innerText =
+            "Unable to evaluate the answer: " +
+            error.message;
+
+        evaluation.classList
+            .remove("hidden");
+
+        console.error(
+            "EVALUATION ERROR:",
+            error
+        );
+
+    }
+
+
+    document
+        .getElementById("evaluateLoading")
+        .classList
+        .add("hidden");
+
+
+    button.disabled = false;
+
+    button.innerText =
+        "Submit Answer ✓";
+}
+
+
+/* =================================================
+   EXTRACT NEXT QUESTION
+================================================= */
+
+function extractNextQuestion(message) {
+
+    if (!message) {
+        return "";
+    }
+
+
+    const upperMessage =
+        message.toUpperCase();
+
+
+    const nextStepIndex =
+        upperMessage.indexOf(
+            "NEXT STEP:"
+        );
+
+
+    if (nextStepIndex === -1) {
+
+        console.warn(
+            "NEXT STEP: not found."
+        );
+
+        return "";
+    }
+
+
+    let nextStep =
+        message.substring(
+            nextStepIndex +
+            "NEXT STEP:".length
+        );
+
+
+    const adaptiveIndex =
+        nextStep
+            .toUpperCase()
+            .indexOf(
+                "ADAPTIVE LEVEL:"
+            );
+
+
+    if (adaptiveIndex !== -1) {
+
+        nextStep =
+            nextStep.substring(
+                0,
+                adaptiveIndex
+            );
+
+    }
+
+
+    return nextStep.trim();
+}
+
+
+/* =================================================
+   UPDATE PROGRESS
+================================================= */
+
+async function updateStats() {
+
+    try {
+
+        const response =
+            await fetch("/progress");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load progress."
+            );
+
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /* -----------------------------------------
+           BASIC STATS
+        ----------------------------------------- */
+
+        document
+            .getElementById("questionCount")
+            .innerText =
+            data.questions || 0;
+
+
+        document
+            .getElementById("attemptCount")
+            .innerText =
+            data.attempts || 0;
+
+
+        const correct =
+            data.correct || 0;
+
+
+        const incorrect =
+            data.incorrect || 0;
+
+
+        /* -----------------------------------------
+           CONCEPT COUNT
+        ----------------------------------------- */
+
+        const gaps =
+            data.concepts || {};
+
+
+        const conceptCount =
+            Object.keys(gaps).length;
+
+
+        document
+            .getElementById("conceptCount")
+            .innerText =
+            conceptCount;
+
+
+        /* -----------------------------------------
+           ACCURACY
+        ----------------------------------------- */
+
+        let accuracy = 0;
+
+
+        if (data.attempts > 0) {
+
+            accuracy =
+                Math.round(
+                    (correct /
+                        data.attempts) *
+                    100
+                );
+
+        }
+
+
+        document
+            .getElementById("accuracyCount")
+            .innerText =
+            accuracy + "%";
+
+
+        /* -----------------------------------------
+           STATUS
+        ----------------------------------------- */
+
+        const status =
+            document.getElementById(
+                "learningStatus"
+            );
+
+
+        if (data.attempts === 0) {
+
+            status.innerText =
+                "🎯 Start answering questions to track your progress!";
+
+        }
+
+        else if (data.mastery_streak >= 3) {
+
+            status.innerText =
+                "🏆 Concept mastered! Excellent work!";
+
+        }
+
+        else if (accuracy >= 80) {
+
+            status.innerText =
+                "🏆 Excellent! You are mastering the concepts!";
+
+        }
+
+        else if (accuracy >= 60) {
+
+            status.innerText =
+                "🚀 Good progress! Keep practicing!";
+
+        }
+
+        else {
+
+            status.innerText =
+                "💪 Keep practicing your learning gaps and improve!";
+
+        }
+
+
+        /* -----------------------------------------
+           LEARNING GAPS
+        ----------------------------------------- */
+
+        const gapContainer =
+            document.getElementById(
+                "learningGaps"
+            );
+
+
+        if (Object.keys(gaps).length === 0) {
+
+            gapContainer.innerHTML = `
+
+                <div class="empty-state">
+
+                    🎓
+                    <br><br>
+
+                    No learning gaps yet.
+                    <br>
+
+                    Start practicing to see your progress.
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        gapContainer.innerHTML = "";
+
+
+        /* -----------------------------------------
+           GAP CARDS
+        ----------------------------------------- */
+
+        for (
+            const [concept, stats]
+            of Object.entries(gaps)
+        ) {
+
+
+            const needsPractice =
+                stats.incorrect >
+                stats.correct;
+
+
+            const statusClass =
+                needsPractice
+                    ? "needs-practice"
+                    : "improving";
+
+
+            const statusText =
+                needsPractice
+                    ? "● Needs Practice"
+                    : "● Improving";
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "gap-card";
+
+
+            const title =
+                document.createElement(
+                    "div"
+                );
+
+
+            title.className =
+                "gap-title";
+
+
+            title.innerText =
+                concept;
+
+
+            const statsText =
+                document.createElement(
+                    "div"
+                );
+
+
+            statsText.className =
+                "gap-stats";
+
+
+            statsText.innerText =
+                "Attempts: " +
+                stats.attempts +
+                " • Correct: " +
+                stats.correct +
+                " • Incorrect: " +
+                stats.incorrect;
+
+
+            const statusElement =
+                document.createElement(
+                    "span"
+                );
+
+
+            statusElement.className =
+                "gap-status " +
+                statusClass;
+
+
+            statusElement.innerText =
+                statusText;
+
+
+            card.appendChild(
+                title
+            );
+
+
+            card.appendChild(
+                statsText
+            );
+
+
+            card.appendChild(
+                statusElement
+            );
+
+
+            gapContainer.appendChild(
+                card
+            );
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Could not load progress:",
+            error
+        );
+
+    }
+}
+
+
+/* =================================================
+   START
+================================================= */
+
+updateStats();
+
+</script>
+
+
+</body>
+
+</html>
